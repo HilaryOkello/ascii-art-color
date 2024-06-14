@@ -1,25 +1,67 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io/fs"
 	"os"
 	"strings"
 
-	"ascii-art-fs/ascii"
+	"ascii-art-color/ascii"
 )
 
 func main() {
-	lenArgs := len(os.Args)
-	if lenArgs < 2 || lenArgs > 3 {
-		fmt.Print(
-			"Usage: go run . [STRING] [BANNER]\n\n" +
+	var str string
+	var substr string
+	fileName := "standard.txt"
+	c := flag.String("color", "", "--color=<your color>")
+	flag.Parse()
+	// fmt.Println(*c)
+	// fmt.Println(flag.NFlag())
 
-				"EX: go run . something standard\n")
-		return
+	if flag.NFlag() == 0 {
+		switch flag.NArg() {
+		case 1:
+			str = flag.Arg(0)
+		case 2:
+			str = flag.Arg(0)
+			fileName = flag.Arg(1) + ".txt"
+		default:
+			fmt.Print(`Usage: go run . [OPTION] [STRING] [BANNER]
+
+EX: go run . --color=<color> "something" shadow`)
+
+		}
+	} else if flag.NFlag() == 1 {
+		switch flag.NArg() {
+		case 1:
+			str = flag.Arg(0)
+		case 2:
+			if CheckFile(flag.Arg(1)) {
+				fileName = flag.Arg(1) + ".txt"
+				str = flag.Arg(0)
+			} else {
+				substr = flag.Arg(0)
+				str = flag.Arg(1)
+			}
+		case 3:
+			substr = flag.Arg(0)
+			str = flag.Arg(1)
+			fileName = flag.Arg(2) + ".txt"
+		default:
+			fmt.Print(`Usage: go run . [OPTION] [STRING] [BANNER]
+
+EX: go run . --color=<color> <substring to be colored> "something" shadow`)
+
+		}
+	} else {
+		fmt.Print(`Usage: go run . [OPTION] [STRING]
+
+EX: go run . --color=<color> <substring to be colored> "something"
+		`)
 	}
-	// Store the first argument in str and replace tab and newline characters
-	str := os.Args[1]
+	fmt.Println("str: ", str, "sub: ", substr, "fileName: ", fileName, "c: ", *c)
+
 	str = strings.ReplaceAll(str, "\\t", "    ")
 	str = strings.ReplaceAll(str, "\n", "\\n")
 	err := ascii.IsPrintableAscii(str)
@@ -28,10 +70,6 @@ func main() {
 		return
 	}
 	// Set the second argument for the banner file name. the default has been set to standard.txt
-	fileName := "standard.txt"
-	if lenArgs == 3 {
-		fileName = os.Args[2] + ".txt"
-	}
 	filePath := os.DirFS("./banner")
 	contentByte, err := fs.ReadFile(filePath, fileName)
 	if err != nil {
@@ -65,7 +103,17 @@ func main() {
 			}
 		} else {
 			// Print the ASCII representation of the word
-			ascii.PrintAscii(str, contentSlice, 0)
+			ascii.PrintAscii(str, substr, *c, contentSlice, 0)
 		}
 	}
+}
+
+func CheckFile(s string) bool {
+	files := []string{"standard", "shadow", "thinkertoy"}
+	for _, file := range files {
+		if file == s {
+			return true
+		}
+	}
+	return false
 }
