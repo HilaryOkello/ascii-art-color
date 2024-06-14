@@ -48,7 +48,7 @@ func PrintAscii(str, substr, color string, contentSlice []string, index int) {
 		lines := strings.Split(character, "\n")
 		if color != "" && substr == "" {
 			fmt.Printf("\033[%sm%s\033[0m", ansiCodes[color], lines[index])
-		} else if substr != "" {
+		} else if substr != "" && len(indices) > 0 {
 			if i >= indices[track] && i < indices[track]+len(substr) {
 				fmt.Printf("\033[%sm%s\033[0m", ansiCodes[color], lines[index])
 				count++
