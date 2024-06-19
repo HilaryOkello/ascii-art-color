@@ -10,9 +10,9 @@ import (
 	"ascii-art-color/ascii"
 )
 
-var usage = fmt.Errorf(`Usage: go run . [OPTION] [STRING] [BANNER]
+var usage = fmt.Errorf(`Usage: go run . [OPTION] [STRING]
 
-EX: go run . --color=<color> "something" shadow`)
+EX: go run . --color=<color> "something"`)
 
 func main() {
 	var str string
