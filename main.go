@@ -10,14 +10,21 @@ import (
 	"ascii-art-color/ascii"
 )
 
+var usage = fmt.Errorf(`Usage: go run . [OPTION] [STRING] [BANNER]
+
+EX: go run . --color=<color> "something" shadow`)
+
 func main() {
 	var str string
 	var substr string
 	fileName := "standard.txt"
+
 	c := flag.String("color", "", "--color=<your color>")
+	if err := ValidateFlag(); err != nil {
+		fmt.Println(usage)
+		return
+	}
 	flag.Parse()
-	// fmt.Println(*c)
-	// fmt.Println(flag.NFlag())
 
 	if flag.NFlag() == 0 {
 		switch flag.NArg() {
@@ -27,9 +34,7 @@ func main() {
 			str = flag.Arg(0)
 			fileName = flag.Arg(1) + ".txt"
 		default:
-			fmt.Print(`Usage: go run . [OPTION] [STRING] [BANNER]
-
-EX: go run . --color=<color> "something" shadow`)
+			fmt.Println(usage)
 
 		}
 	} else if flag.NFlag() == 1 {
@@ -49,19 +54,12 @@ EX: go run . --color=<color> "something" shadow`)
 			str = flag.Arg(1)
 			fileName = flag.Arg(2) + ".txt"
 		default:
-			fmt.Print(`Usage: go run . [OPTION] [STRING] [BANNER]
-
-EX: go run . --color=<color> <substring to be colored> "something" shadow`)
+			fmt.Println(usage)
 
 		}
 	} else {
-		fmt.Print(`Usage: go run . [OPTION] [STRING]
-
-EX: go run . --color=<color> <substring to be colored> "something"
-		`)
+		fmt.Print(usage)
 	}
-	fmt.Println("str: ", str, "sub: ", substr, "fileName: ", fileName, "c: ", *c)
-
 	str = strings.ReplaceAll(str, "\\t", "    ")
 	str = strings.ReplaceAll(str, "\n", "\\n")
 	err := ascii.IsPrintableAscii(str)
@@ -73,7 +71,7 @@ EX: go run . --color=<color> <substring to be colored> "something"
 	filePath := os.DirFS("./banner")
 	contentByte, err := fs.ReadFile(filePath, fileName)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Print(err)
 		return
 	}
 	if len(contentByte) == 0 {
@@ -116,4 +114,23 @@ func CheckFile(s string) bool {
 		}
 	}
 	return false
+}
+
+func ValidateFlag() error {
+	seenFlags := make(map[string]bool)
+	for _, arg := range os.Args[1:] {
+		if strings.HasPrefix(arg, "-") {
+			if strings.HasPrefix(arg, "-color") {
+				return usage
+			} else if !strings.Contains(arg, "=") && strings.Contains(arg, "color") {
+				return usage
+			}
+			flagName := strings.SplitN(arg[2:], "=", 2)[0]
+			if seenFlags[flagName] {
+				return usage
+			}
+			seenFlags[flagName] = true
+		}
+	}
+	return nil
 }
