@@ -17,18 +17,19 @@ To run the program, you must define your [OPTION], which is a flag: --color=\<co
 ```bash
 go run . [OPTION] [STRING]
 ```
-An example of a properly formated command
+#### An example of a properly formated command
 
 ```bash
 go run . --color=blue World "Hello World"
 ```
 ![alt text](images/image1.png)
-Without a substring to be colored
+#### Without a substring to be colored
 
 ```bash
 go run . --color=blue "Hello World"
 ```
 ![alt text](images/image2.png)
+
 You could also specifiy the banner style as either 'standard', 'shadow', or 'thinkertoy'.
 ```bash
 go run . --color=blue World "Hello World" shadow
