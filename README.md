@@ -29,13 +29,12 @@ go run . --color=blue World "Hello World"
 go run . --color=blue "Hello World"
 ```
 ![alt text](images/image2.png)
-
-You could also specifiy the banner style as either 'standard', 'shadow', or 'thinkertoy'.
+#### You could also specifiy the banner style as either 'standard', 'shadow', or 'thinkertoy'.
 ```bash
 go run . --color=blue World "Hello World" shadow
 ```
 ![text](images/image3.png)
-The program will also run if only the string is passed.
+#### The program will also run if only the string is passed.
 ```bash
 go run . "Hello World"
 ```
