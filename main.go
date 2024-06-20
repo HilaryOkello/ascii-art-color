@@ -71,7 +71,7 @@ func main() {
 	filePath := os.DirFS("./banner")
 	contentByte, err := fs.ReadFile(filePath, fileName)
 	if err != nil {
-		fmt.Print(err)
+		fmt.Println(err)
 		return
 	}
 	if len(contentByte) == 0 {

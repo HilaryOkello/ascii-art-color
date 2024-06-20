@@ -50,6 +50,6 @@ This project was a collaboration of  three apprentices from [z01Kisumu](https://
 2. [Quinter Ochieng](https://github.com/apondi-art)
 3. [John Opiyo](https://github.com/SidneyOps75)
 
-## License
+### License
 
 This project is licensed under the [MIT License](./LICENSE.txt)
