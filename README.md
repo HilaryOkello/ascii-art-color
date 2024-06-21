@@ -1,6 +1,6 @@
-# ascii-art-color
+# Ascii-Art-Color
 
-Ascii art color is a command line programs written in Go that prints an ascii art representation of a string to the terminal based on a banner style and with the ability to specify the color(of the string) or a substring to be colored within the string.
+Ascii art color is a command line programs written in **Go** that prints an ascii art representation of a string to the terminal based on a **banner style** and with the ability to specify the **color**(of the string) or a **substring** to be colored within the **string**.
 
 ### Required
 You need to have at least go version go1.22.0 or higher to run the program. You can download and install it from the official Go website.
