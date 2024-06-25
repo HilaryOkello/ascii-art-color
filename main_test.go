@@ -13,93 +13,93 @@ import (
 // If they're not equal, we throw an error.
 func TestMain(t *testing.T) {
 	testCases := []struct {
-		input  string
+		color  string
+		substr string
+		str    string
 		banner string
 		want   string
 	}{
 		{
-			input:  "",
+			color:  "",
+			substr: "",
+			str:    "",
 			banner: "standard",
 			want:   "",
 		},
 		{
-			input:  "No File",
-			banner: "hello",
-			want: `open hello.txt: no such file or directory$
-`,
-		},
-		{
-			input:  "\n",
-			banner: "thinkertoy",
-			want:   "$\n",
-		},
-		{
-			input:  "Hello\n",
-			banner: "shadow",
-			want: `                                 $
-_|    _|          _| _|          $
-_|    _|   _|_|   _| _|   _|_|   $
-_|_|_|_| _|_|_|_| _| _| _|    _| $
-_|    _| _|       _| _| _|    _| $
-_|    _|   _|_|_| _| _|   _|_|   $
-                                 $
-                                 $
-$
-`,
-		},
-		{
-			input:  "1Hello 2There",
+			color:  "red",
+			substr: "",
+			str:    "Hello",
 			banner: "standard",
-			want: `     _    _          _   _                         _______   _                           $
- _  | |  | |        | | | |                ____   |__   __| | |                          $
-/ | | |__| |   ___  | | | |   ___         |___ \     | |    | |__     ___   _ __    ___  $
-| | |  __  |  / _ \ | | | |  / _ \          __) |    | |    |  _ \   / _ \ | '__|  / _ \ $
-| | | |  | | |  __/ | | | | | (_) |        / __/     | |    | | | | |  __/ | |    |  __/ $
-|_| |_|  |_|  \___| |_| |_|  \___/        |_____|    |_|    |_| |_|  \___| |_|     \___| $
-                                                                                         $
-                                                                                         $
+			want: `[31m _    _  [0m[31m       [0m[31m _  [0m[31m _  [0m[31m        [0m
+[31m| |  | | [0m[31m       [0m[31m| | [0m[31m| | [0m[31m        [0m
+[31m| |__| | [0m[31m  ___  [0m[31m| | [0m[31m| | [0m[31m  ___   [0m
+[31m|  __  | [0m[31m / _ \ [0m[31m| | [0m[31m| | [0m[31m / _ \  [0m
+[31m| |  | | [0m[31m|  __/ [0m[31m| | [0m[31m| | [0m[31m| (_) | [0m
+[31m|_|  |_| [0m[31m \___| [0m[31m|_| [0m[31m|_| [0m[31m \___/  [0m
+[31m         [0m[31m       [0m[31m    [0m[31m    [0m[31m        [0m
+[31m         [0m[31m       [0m[31m    [0m[31m    [0m[31m        [0m
 `,
 		},
 		{
-			input:  "{Hello There}",
-			banner: "thinkertoy",
-			want: `                                                          $
-  o-o o  o     o o           o-O-o o                o-o   $
-  |   |  |     | |             |   |                  |   $
-o-O   O--O o-o | | o-o         |   O--o o-o o-o o-o   O-o $
-  |   |  | |-' | | | |         |   |  | |-' |   |-'   |   $
-  o-o o  o o-o o o o-o         o   o  o o-o o   o-o o-o   $
-                                                          $
-                                                          $
-`,
-		},
-		{
-			input:  "Hello\n\nThere",
+			color:  "yellow",
+			substr: "there",
+			str:    "hello there",
 			banner: "shadow",
-			want: `                                 $
-_|    _|          _| _|          $
-_|    _|   _|_|   _| _|   _|_|   $
-_|_|_|_| _|_|_|_| _| _| _|    _| $
-_|    _| _|       _| _| _|    _| $
-_|    _|   _|_|_| _| _|   _|_|   $
-                                 $
-                                 $
-$
-                                               $
-_|_|_|_|_| _|                                  $
-    _|     _|_|_|     _|_|   _|  _|_|   _|_|   $
-    _|     _|    _| _|_|_|_| _|_|     _|_|_|_| $
-    _|     _|    _| _|       _|       _|       $
-    _|     _|    _|   _|_|_| _|         _|_|_| $
-                                               $
-                                               $
+			want: `                                       [33m         [0m[33m         [0m[33m         [0m[33m         [0m[33m         [0m
+_|                _| _|                [33m  _|     [0m[33m_|       [0m[33m         [0m[33m         [0m[33m         [0m
+_|_|_|     _|_|   _| _|   _|_|         [33m_|_|_|_| [0m[33m_|_|_|   [0m[33m  _|_|   [0m[33m_|  _|_| [0m[33m  _|_|   [0m
+_|    _| _|_|_|_| _| _| _|    _|       [33m  _|     [0m[33m_|    _| [0m[33m_|_|_|_| [0m[33m_|_|     [0m[33m_|_|_|_| [0m
+_|    _| _|       _| _| _|    _|       [33m  _|     [0m[33m_|    _| [0m[33m_|       [0m[33m_|       [0m[33m_|       [0m
+_|    _|   _|_|_| _| _|   _|_|         [33m    _|_| [0m[33m_|    _| [0m[33m  _|_|_| [0m[33m_|       [0m[33m  _|_|_| [0m
+                                       [33m         [0m[33m         [0m[33m         [0m[33m         [0m[33m         [0m
+                                       [33m         [0m[33m         [0m[33m         [0m[33m         [0m[33m         [0m
+`,
+		},
+		{
+			color:  "rainbow",
+			substr: "there",
+			str:    "not valid",
+			banner: "shadow",
+			want: `                                                                    
+                    _|                               _| _|       _| 
+_|_|_|     _|_|   _|_|_|_|       _|      _|   _|_|_| _|      _|_|_| 
+_|    _| _|    _|   _|           _|      _| _|    _| _| _| _|    _| 
+_|    _| _|    _|   _|             _|  _|   _|    _| _| _| _|    _| 
+_|    _|   _|_|       _|_|           _|       _|_|_| _| _|   _|_|_| 
+                                                                    
+                                                                    
+`,
+		},
+		{
+			color:  "",
+			substr: "",
+			str:    "here",
+			banner: "",
+			want: ` _                           
+| |                          
+| |__     ___   _ __    ___  
+|  _ \   / _ \ | '__|  / _ \ 
+| | | | |  __/ | |    |  __/ 
+|_| |_|  \___| |_|     \___| 
+                             
+                             
 `,
 		},
 	}
 
 	for _, tc := range testCases {
-		t.Run(tc.input, func(t *testing.T) {
-			cmd := exec.Command("sh", "-c", fmt.Sprintf("go run . \"%s\"  %s| cat -e", tc.input, tc.banner))
+		t.Run(tc.str, func(t *testing.T) {
+			var cmd *exec.Cmd
+			if tc.color == "" {
+				cmd = exec.Command("sh", "-c", fmt.Sprintf("go run . \"%s\"", tc.str))
+			} else {
+				if tc.substr == "" {
+					cmd = exec.Command("sh", "-c", fmt.Sprintf("go run . --color=%s \"%s\" \"%s\"", tc.color, tc.str, tc.banner))
+				} else {
+					cmd = exec.Command("sh", "-c", fmt.Sprintf("go run . --color=%s \"%s\" \"%s\" \"%s\"", tc.color, tc.substr, tc.str, tc.banner))
+				}
+			}
 			output, err := cmd.Output()
 			if err != nil {
 				t.Fatalf("Error running program: %v", err)
