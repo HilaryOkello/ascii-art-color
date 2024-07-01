@@ -35,6 +35,7 @@ func main() {
 			fileName = flag.Arg(1) + ".txt"
 		default:
 			fmt.Println(usage)
+			return
 
 		}
 	} else if flag.NFlag() == 1 {
@@ -55,6 +56,7 @@ func main() {
 			fileName = flag.Arg(2) + ".txt"
 		default:
 			fmt.Println(usage)
+			return
 
 		}
 	} else {
