@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -57,6 +58,38 @@ func CheckFileTamper(file string, content []byte) error {
 	computedChecksum := hex.EncodeToString(checksum[:])
 	if computedChecksum != expectedChecksum[file] {
 		return fmt.Errorf("%s tampered", file)
+	}
+	return nil
+}
+
+func CheckFile(s string) bool {
+	files := []string{"standard", "shadow", "thinkertoy"}
+	for _, file := range files {
+		if file == s {
+			return true
+		}
+	}
+	return false
+}
+
+func ValidateFlag() error {
+	usage := fmt.Errorf(`Usage: go run . [OPTION] [STRING]
+
+EX: go run . --color=<color> "something"`)
+	seenFlags := make(map[string]bool)
+	for _, arg := range os.Args[1:] {
+		if strings.HasPrefix(arg, "-") {
+			if strings.HasPrefix(arg, "-color") {
+				return usage
+			} else if !strings.Contains(arg, "=") && strings.Contains(arg, "color") {
+				return usage
+			}
+			flagName := strings.SplitN(arg[2:], "=", 2)[0]
+			if seenFlags[flagName] {
+				return usage
+			}
+			seenFlags[flagName] = true
+		}
 	}
 	return nil
 }

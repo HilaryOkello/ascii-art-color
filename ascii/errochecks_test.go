@@ -1,6 +1,7 @@
 package ascii
 
 import (
+	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -102,6 +103,93 @@ func TestCheckFileTamper(t *testing.T) {
 					"Expected Error: %v\n\n"+
 					"Found Error: %v\n",
 					tc.name, tc.fileName, expectedErr, err.Error())
+			}
+		})
+	}
+}
+
+func TestCheckFile(t *testing.T) {
+	testcases := []struct {
+		file     string
+		expected bool
+	}{
+		{
+			file:     "standard",
+			expected: true,
+		},
+		{
+			file:     "shadow",
+			expected: true,
+		},
+		{
+			file:     "thinkertoy",
+			expected: true,
+		},
+		{
+			file:     "STANDARD",
+			expected: false,
+		},
+		{
+			file:     "",
+			expected: false,
+		},
+	}
+	for _, tc := range testcases {
+		t.Run(tc.file, func(t *testing.T) {
+			result := CheckFile(tc.file)
+			if result != tc.expected {
+				t.Errorf("CheckFile(%s) is : %v ; want %v\n", tc.file, result, tc.expected)
+			}
+		})
+	}
+}
+
+func TestValidateFlag(t *testing.T) {
+	usage := fmt.Errorf(`Usage: go run . [OPTION] [STRING]
+
+EX: go run . --color=<color> "something"`)
+	testcases := []struct {
+		flag        string
+		expectedErr error
+	}{
+		{
+			flag:        "-color",
+			expectedErr: usage,
+		},
+		{
+			flag:        "--color",
+			expectedErr: usage,
+		},
+		{
+			flag:        "--color=<color>",
+			expectedErr: nil,
+		},
+		{
+			flag:        "color",
+			expectedErr: usage,
+		},
+		{
+			flag:        "--color ",
+			expectedErr: usage,
+		},
+		{
+			flag:        "--color <color>",
+			expectedErr: usage,
+		},
+	}
+	for _, tc := range testcases {
+		t.Run(tc.flag, func(t *testing.T) {
+			err := ValidateFlag()
+			if tc.expectedErr == nil && err != nil {
+				t.Errorf("Test%s Failed.\n\n"+
+					"Expected:\nError: %v\n\n"+
+					"Found: \nError: %v\n",
+					tc.flag, tc.expectedErr, err)
+			} else if err != nil && (err.Error() != tc.expectedErr.Error()) {
+				t.Errorf("Test%s Failed.\n \n"+
+					"Expected:\nError: %v\n\n"+
+					"Found: \nError: %v\n",
+					tc.flag, tc.expectedErr, err)
 			}
 		})
 	}

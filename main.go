@@ -20,7 +20,7 @@ func main() {
 	fileName := "standard.txt"
 
 	c := flag.String("color", "", "--color=<your color>")
-	if err := ValidateFlag(); err != nil {
+	if err := ascii.ValidateFlag(); err != nil {
 		fmt.Println(usage)
 		return
 	}
@@ -43,7 +43,7 @@ func main() {
 		case 1:
 			str = flag.Arg(0)
 		case 2:
-			if CheckFile(flag.Arg(1)) {
+			if ascii.CheckFile(flag.Arg(1)) {
 				fileName = flag.Arg(1) + ".txt"
 				str = flag.Arg(0)
 			} else {
@@ -106,33 +106,4 @@ func main() {
 			ascii.PrintAscii(str, substr, *c, contentSlice, 0)
 		}
 	}
-}
-
-func CheckFile(s string) bool {
-	files := []string{"standard", "shadow", "thinkertoy"}
-	for _, file := range files {
-		if file == s {
-			return true
-		}
-	}
-	return false
-}
-
-func ValidateFlag() error {
-	seenFlags := make(map[string]bool)
-	for _, arg := range os.Args[1:] {
-		if strings.HasPrefix(arg, "-") {
-			if strings.HasPrefix(arg, "-color") {
-				return usage
-			} else if !strings.Contains(arg, "=") && strings.Contains(arg, "color") {
-				return usage
-			}
-			flagName := strings.SplitN(arg[2:], "=", 2)[0]
-			if seenFlags[flagName] {
-				return usage
-			}
-			seenFlags[flagName] = true
-		}
-	}
-	return nil
 }
