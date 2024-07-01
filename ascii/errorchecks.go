@@ -1,15 +1,15 @@
-// this package basically has functions which handles errors at different stages
+// this package has functions that handles errors at different stages
 package ascii
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"strings"
 )
 
-// the function takes string and returns an error
-// the function checks if the string passed is printable or has any of the escape values,
-// and if so the nonasciivalues  are stored in the varriable nonprintable and  the escapes value in foundEscapes respectively
-// if both foundescapes and nonprintable varriable is not empty ,the error message is printed  along with the found values
+// the function takes string and returns an error and returns
+// a non-nil error if it finds non-printable characters
 func IsPrintableAscii(str string) error {
 	var nonPrintables string
 	var foundEscapes string
@@ -45,19 +45,18 @@ func IsPrintableAscii(str string) error {
 	return nil
 }
 
-// function takes string  which is filename , content of filename respectively and then returns an error message
-// if the name obtained does not match the expected length respectively, then error message is displayed
-func CheckFileTamper(fileName string, content []byte) error {
-	errMessage := " is tampered"
-	lengthContent := len(content)
-	// Checks if the length of the content matches the expected length of each file
-	if fileName == "standard.txt" && lengthContent != 6623 {
-		return fmt.Errorf("%s%s", fileName, errMessage)
-	} else if fileName == "thinkertoy.txt" && lengthContent != 5558 {
-		return fmt.Errorf("%s%s", fileName, errMessage)
-	} else if fileName == "shadow.txt" && lengthContent != 7465 {
-		return fmt.Errorf("%s%s", fileName, errMessage)
+// function takes the file name and content of file name respectively and then returns an error message
+// if the file has been tampered
+func CheckFileTamper(file string, content []byte) error {
+	expectedChecksum := map[string]string{
+		"standard.txt":   "e194f1033442617ab8a78e1ca63a2061f5cc07a3f05ac226ed32eb9dfd22a6bf",
+		"thinkertoy.txt": "64285e4960d199f4819323c4dc6319ba34f1f0dd9da14d07111345f5d76c3fa3",
+		"shadow.txt":     "26b94d0b134b77e9fd23e0360bfd81740f80fb7f6541d1d8c5d85e73ee550f73",
 	}
-
+	checksum := sha256.Sum256(content)
+	computedChecksum := hex.EncodeToString(checksum[:])
+	if computedChecksum != expectedChecksum[file] {
+		return fmt.Errorf("%s tampered", file)
+	}
 	return nil
 }
