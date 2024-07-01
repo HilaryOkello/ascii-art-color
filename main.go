@@ -35,6 +35,7 @@ func main() {
 			fileName = flag.Arg(1) + ".txt"
 		default:
 			fmt.Println(usage)
+			return
 
 		}
 	} else if flag.NFlag() == 1 {
@@ -55,6 +56,7 @@ func main() {
 			fileName = flag.Arg(2) + ".txt"
 		default:
 			fmt.Println(usage)
+			return
 
 		}
 	} else {
@@ -71,7 +73,7 @@ func main() {
 	filePath := os.DirFS("./banner")
 	contentByte, err := fs.ReadFile(filePath, fileName)
 	if err != nil {
-		fmt.Print(err)
+		fmt.Println(err)
 		return
 	}
 	if len(contentByte) == 0 {
