@@ -14,25 +14,26 @@ var usage = fmt.Errorf(`Usage: go run . [OPTION] [STRING]
 
 EX: go run . --color=<color> "something"`)
 
+//process args passed on terminal and returns our substr, str, filename, and error
+// returns nil error if processed successfuly
 func processArgs() (string, string, string, error) {
 	var str, substr string
-	fileName := "standard.txt" // default fileName
-
-	if flag.NFlag() == 0 {
+	fileName := "standard.txt" 
+	if flag.NFlag() == 0 {//color flag not passed
 		switch flag.NArg() {
 		case 1: // just single string
 			str = flag.Arg(0)
-		case 2: // string + filename
+		case 2: // string + banner
 			str = flag.Arg(0)
 			fileName = flag.Arg(1) + ".txt"
 		default:
 			return "", "", "", fmt.Errorf("%s", usage)
 		}
-	} else if flag.NFlag() == 1 {
+	} else if flag.NFlag() == 1 {//color flag passed
 		switch flag.NArg() {
-		case 1:
+		case 1: //single string
 			str = flag.Arg(0)
-		case 2:
+		case 2: // str + banner || substr + str
 			if ascii.CheckFile(flag.Arg(1)) {
 				fileName = flag.Arg(1) + ".txt"
 				str = flag.Arg(0)
@@ -40,7 +41,7 @@ func processArgs() (string, string, string, error) {
 				substr = flag.Arg(0)
 				str = flag.Arg(1)
 			}
-		case 3:
+		case 3: //substr + str + banner
 			substr = flag.Arg(0)
 			str = flag.Arg(1)
 			fileName = flag.Arg(2) + ".txt"
@@ -51,13 +52,17 @@ func processArgs() (string, string, string, error) {
 	} else {
 		return "", "", "", fmt.Errorf("%s", usage)
 	}
+	//replace newline && tab characters
 	str = strings.ReplaceAll(str, "\\t", "    ")
 	str = strings.ReplaceAll(str, "\n", "\\n")
-	str = strings.ReplaceAll(substr, "\\t", "    ")
-	str = strings.ReplaceAll(substr, "\n", "\\n")
+	substr = strings.ReplaceAll(substr, "\\t", "    ")
+	substr = strings.ReplaceAll(substr, "\n", "\\n")
 	return str, substr, fileName, nil
 }
 
+
+// reads from the banner file and return ascii-art characters as a []string
+// returns non-nil error if it encounters errors
 func ReadBannerFile(fileName string) ([]string, error) {
 	// Set the second argument for the banner file name. the default has been set to standard.txt
 	filePath := os.DirFS("./banner")
@@ -89,7 +94,6 @@ func main() {
 		return
 	}
 	flag.Parse()
-
 	// process args passed
 	str, substr, fileName, err := processArgs()
 	if err != nil {
@@ -119,7 +123,8 @@ func main() {
 				fmt.Println()
 			}
 		} else {
-			if strings.Contains(str, substr) {
+			//handles where substr has multiple lines
+			if substr != "" && i < len(substrs) && strings.Contains(str, substr) {
 				ascii.PrintAscii(s, substrs[i], *c, contentSlice, 0)
 			} else {
 				ascii.PrintAscii(s, substr, *c, contentSlice, 0)
