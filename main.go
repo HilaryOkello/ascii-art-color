@@ -94,16 +94,20 @@ func main() {
 	contentSlice := strings.Split(contentString, "\n\n")
 	// Split the input string by "\\n" to get individual words
 	words := strings.Split(str, "\\n")
+	substrs := strings.Split(substr, "\\n")
 	count := 0
-	for _, str := range words {
-		if str == "" {
+	for i, s := range words {
+		if s == "" {
 			count++
 			if count < len(words) {
 				fmt.Println()
 			}
 		} else {
-			// Print the ASCII representation of the word
-			ascii.PrintAscii(str, substr, *c, contentSlice, 0)
+			if strings.Contains(str, substr) {
+				ascii.PrintAscii(s, substrs[i], *c, contentSlice, 0)
+			} else {
+				ascii.PrintAscii(s, substr, *c, contentSlice, 0)
+			}
 		}
 	}
 }
