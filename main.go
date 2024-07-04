@@ -14,35 +14,26 @@ var usage = fmt.Errorf(`Usage: go run . [OPTION] [STRING]
 
 EX: go run . --color=<color> "something"`)
 
-func main() {
-	var str string
-	var substr string
-	fileName := "standard.txt"
-
-	c := flag.String("color", "", "--color=<your color>")
-	if err := ascii.ValidateFlag(); err != nil {
-		fmt.Println(usage)
-		return
-	}
-	flag.Parse()
-
-	if flag.NFlag() == 0 {
+//process args passed on terminal and returns our substr, str, filename, and error
+// returns nil error if processed successfuly
+func processArgs() (string, string, string, error) {
+	var str, substr string
+	fileName := "standard.txt" 
+	if flag.NFlag() == 0 {//color flag not passed
 		switch flag.NArg() {
-		case 1:
+		case 1: // just single string
 			str = flag.Arg(0)
-		case 2:
+		case 2: // string + banner
 			str = flag.Arg(0)
 			fileName = flag.Arg(1) + ".txt"
 		default:
-			fmt.Println(usage)
-			return
-
+			return "", "", "", fmt.Errorf("%s", usage)
 		}
-	} else if flag.NFlag() == 1 {
+	} else if flag.NFlag() == 1 {//color flag passed
 		switch flag.NArg() {
-		case 1:
+		case 1: //single string
 			str = flag.Arg(0)
-		case 2:
+		case 2: // str + banner || substr + str
 			if ascii.CheckFile(flag.Arg(1)) {
 				fileName = flag.Arg(1) + ".txt"
 				str = flag.Arg(0)
@@ -50,41 +41,41 @@ func main() {
 				substr = flag.Arg(0)
 				str = flag.Arg(1)
 			}
-		case 3:
+		case 3: //substr + str + banner
 			substr = flag.Arg(0)
 			str = flag.Arg(1)
 			fileName = flag.Arg(2) + ".txt"
 		default:
-			fmt.Println(usage)
-			return
+			return "", "", "", fmt.Errorf("%s", usage)
 
 		}
 	} else {
-		fmt.Print(usage)
+		return "", "", "", fmt.Errorf("%s", usage)
 	}
+	//replace newline && tab characters
 	str = strings.ReplaceAll(str, "\\t", "    ")
 	str = strings.ReplaceAll(str, "\n", "\\n")
-	err := ascii.IsPrintableAscii(str)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	substr = strings.ReplaceAll(substr, "\\t", "    ")
+	substr = strings.ReplaceAll(substr, "\n", "\\n")
+	return str, substr, fileName, nil
+}
+
+
+// reads from the banner file and return ascii-art characters as a []string
+// returns non-nil error if it encounters errors
+func ReadBannerFile(fileName string) ([]string, error) {
 	// Set the second argument for the banner file name. the default has been set to standard.txt
 	filePath := os.DirFS("./banner")
 	contentByte, err := fs.ReadFile(filePath, fileName)
 	if err != nil {
-		fmt.Println(err)
-		return
+		return nil, err
 	}
 	if len(contentByte) == 0 {
-		fmt.Println("Banner file is empty")
-		return
+		return nil, fmt.Errorf("Banner file is empty")
 	}
 	// check if the banner file has been tampered with
-	er := ascii.CheckFileTamper(fileName, contentByte)
-	if er != nil {
-		fmt.Println(er)
-		return
+	if err = ascii.CheckFileTamper(fileName, contentByte); err != nil {
+		return nil, err
 	}
 	contentString := string(contentByte[1:])
 	if fileName == "thinkertoy.txt" {
@@ -92,18 +83,52 @@ func main() {
 		contentString = strings.ReplaceAll(string(contentByte[2:]), "\r\n", "\n")
 	}
 	contentSlice := strings.Split(contentString, "\n\n")
-	// Split the input string by "\\n" to get individual words
+	return contentSlice, nil
+}
+
+func main() {
+	// define a color flag
+	c := flag.String("color", "", "--color=<your color>")
+	if err := ascii.ValidateFlag(); err != nil {
+		fmt.Println(usage)
+		return
+	}
+	flag.Parse()
+	// process args passed
+	str, substr, fileName, err := processArgs()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	// check if characters are printable
+	if err := ascii.IsPrintableAscii(str); err != nil {
+		fmt.Println(err)
+		return
+	}
+	// get characters from the banner file
+	contentSlice, err := ReadBannerFile(fileName)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// Split the str & substr by "\\n" to get the string section in each line
 	words := strings.Split(str, "\\n")
+	substrs := strings.Split(substr, "\\n")
 	count := 0
-	for _, str := range words {
-		if str == "" {
+	for i, s := range words {
+		if s == "" {
 			count++
 			if count < len(words) {
 				fmt.Println()
 			}
 		} else {
-			// Print the ASCII representation of the word
-			ascii.PrintAscii(str, substr, *c, contentSlice, 0)
+			//handles where substr has multiple lines
+			if substr != "" && i < len(substrs) && strings.Contains(str, substr) {
+				ascii.PrintAscii(s, substrs[i], *c, contentSlice, 0)
+			} else {
+				ascii.PrintAscii(s, substr, *c, contentSlice, 0)
+			}
 		}
 	}
 }

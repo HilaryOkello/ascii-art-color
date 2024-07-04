@@ -1,6 +1,8 @@
 package ascii
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestGetIndices(t *testing.T) {
 	testCases := []struct {
