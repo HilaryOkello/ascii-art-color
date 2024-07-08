@@ -1,53 +1,66 @@
+// Package ascii provides functions for printing ASCII art
+//with optional color highlighting.
 package ascii
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
-/*
-function takes str which is string passed at argument one ,contentslice which is characters from filaname,
-and index which tracks the number of lines per character.
-it recursively print the provided string up to last line
-*/
-func PrintAscii(str, substr, color string, contentSlice []string, index int) {
-	if index == 8 {
-		return
-	}
-	indices := GetIndices(str, substr)
+// PrintArgs contains parameters for the PrintAscii function.
+type PrintArgs struct {
+	Str        string
+	Substr     string
+	Color      string
+	Characters []string
+}
+
+// PrintAscii prints ASCII art based on the given PrintArgs configuration.
+func PrintAscii(args *PrintArgs) {
+	indices := GetIndices(args.Str, args.Substr)
 	track := 0
 	count := 0
-	code, err := ParseColor(color)
-	if err != nil {
-		log.Fatal(err)
-	}
-	// loop through each character in a str and prints it line by line.
-	for i, char := range str {
-		character := contentSlice[int(char)-32]                 // obtain char from contentslice
-		character = strings.ReplaceAll(character, "\r\n", "\n") // thinkertoy
-		lines := strings.Split(character, "\n")
-		if color != "" && substr == "" {
-			fmt.Printf("\033[%sm%s\033[0m", code, lines[index])
-		} else if substr != "" && len(indices) > 0 {
-			if i >= indices[track] && i < indices[track]+len(substr) {
-				fmt.Printf("\033[%sm%s\033[0m", code, lines[index])
+	colorCode := "\033[" + args.Color + "m"
+	reset := "\033[0m"
+	index := 0
+
+	// Loop through each line of ASCII art (up to 8 lines)
+	for index < 8 {
+		for i, char := range args.Str {
+			character := args.Characters[int(char)-32]             
+			lines := strings.Split(character, "\n")
+
+			if shouldPrintWithColor(args, indices, track, i) {
+				fmt.Printf("%s%s%s", colorCode, lines[index], reset)
 				count++
-				if count == len(substr) && track < len(indices)-1 {
+				if count == len(args.Substr) && track < len(indices)-1 {
 					track++
 					count = 0
 				}
 			} else {
 				fmt.Print(lines[index])
 			}
-		} else {
-			fmt.Print(lines[index])
 		}
+		fmt.Println()
+		index++
 	}
-	fmt.Println()
-	PrintAscii(str, substr, color, contentSlice, index+1)
 }
 
+// shouldPrintWithColor determines if a character should be printed
+// with color highlighting based on the provided arguments.
+func shouldPrintWithColor(args *PrintArgs, indices []int, track, i int) bool {
+	if args.Color != "" && args.Substr == "" {
+		return true
+	} else if args.Substr != "" && len(indices) > 0 {
+		if i >= indices[track] && i < indices[track]+len(args.Substr) {
+			return true
+		}
+	}
+	return false
+}
+
+// GetIndices returns the starting indices of all occurrences of substr in str.
+// If substr is an empty string, it returns an empty slice.
 func GetIndices(str, substr string) (indices []int) {
 	if substr == "" {
 		return
