@@ -15,7 +15,7 @@ cd ascii-art-color
 To run the program, you must define your [OPTION], which is a flag: --color=\<color\> \<substring to be colored>. Where color is your color and the substring to be colored (optional) is a substring within [STRING] you want colored.And a [STRING] which is the string you want an ascii representation of. If a substring is not specified, the whole string would be colored.
 
 ```bash
-go run . [OPTION] [STRING]
+go run . [OPTION] [STRING] [BANNER]
 ```
 #### An example of a properly formated command
 
@@ -34,7 +34,7 @@ go run . --color=blue "Hello World"
 go run . --color=blue World "Hello World" shadow
 ```
 ![text](images/image3.png)
-#### The program will also run if only the string is passed.
+#### The program will also run if only a string is passed.
 ```bash
 go run . "Hello World"
 ```
