@@ -6,11 +6,6 @@ import (
 	"testing"
 )
 
-// First, we initialize a testCases [] struct to store all our input and want cases
-// We then loop through testCases and run subtests for each case
-// We create a cmd using os/exec.Command to construct a command to run the program
-// We then capture the output of the command (got) and compare it to want
-// If they're not equal, we throw an error.
 func TestMain(t *testing.T) {
 	testCases := []struct {
 		color  string
@@ -57,17 +52,9 @@ func TestMain(t *testing.T) {
 		{
 			color:  "rainbow",
 			substr: "there",
-			str:    "not valid",
+			str:    "not a valid color",
 			banner: "shadow",
-			want: `                                                                    
-                    _|                               _| _|       _| 
-_|_|_|     _|_|   _|_|_|_|       _|      _|   _|_|_| _|      _|_|_| 
-_|    _| _|    _|   _|           _|      _| _|    _| _| _| _|    _| 
-_|    _| _|    _|   _|             _|  _|   _|    _| _| _| _|    _| 
-_|    _|   _|_|       _|_|           _|       _|_|_| _| _|   _|_|_| 
-                                                                    
-                                                                    
-`,
+			want: "invalid color/rgb/hex\n",                                                                 
 		},
 		{
 			color:  "",
@@ -83,6 +70,13 @@ _|    _|   _|_|       _|_|           _|       _|_|_| _| _|   _|_|_|
                              
                              
 `,
+		},
+		{
+			color:  "yellow",
+			substr: "invalid",
+			str:    "invalid banner",
+			banner: "shadw",
+			want: "open shadw.txt: no such file or directory\n",
 		},
 	}
 
