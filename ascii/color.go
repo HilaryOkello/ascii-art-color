@@ -33,14 +33,15 @@ func ParseColor(c string) (string, error) {
 			return "", err
 		}
 		return code, nil
-	} /*else if strings.HasPrefix(c, "#") {
+	} else if strings.HasPrefix(c, "#") {
 		code, err := hexToANSI(c)
 		if err != nil {
 			return "", err
 		}
 		return code, nil
-	} */
-	return ansiCodes[c], nil
+	} else {
+		return ansiCodes[c], nil
+	}
 }
 
 func rgbToANSI(c string) (string, error) {
@@ -63,6 +64,26 @@ func rgbToANSI(c string) (string, error) {
 	}
 	if (r < 0 || r > 255) || (g < 0 || g > 255) || (b < 0 || b > 255) {
 		return "", fmt.Errorf("invalid rgb")
+	}
+	return fmt.Sprintf("38;2;%d;%d;%d", r, g, b), nil
+}
+
+func hexToANSI(c string) (string, error) {
+	hex := strings.TrimPrefix(c, "#")
+	if len(hex) != 6 {
+		return "", fmt.Errorf("invalid color hexadecimal")
+	}
+	r, err := strconv.ParseInt(hex[0:2], 16, 64)
+	if err != nil {
+		return "", err
+	}
+	g, err := strconv.ParseInt(hex[2:4], 16, 64)
+	if err != nil {
+		return "", err
+	}
+	b, err := strconv.ParseInt(hex[4:], 16, 64)
+	if err != nil {
+		return "", err
 	}
 	return fmt.Sprintf("38;2;%d;%d;%d", r, g, b), nil
 }
