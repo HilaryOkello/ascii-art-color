@@ -52,8 +52,10 @@ func main() {
 				fmt.Println()
 			}
 		} else {
-			if substr != "" && i < len(substrs) && strings.Contains(str, substr) {
-				substr = substrs[i]
+			if substr != "" && i < len(substrs) {
+				if substrs[i] != "" {
+					substr = substrs[i]
+				}
 			}
 			args := &ascii.PrintArgs{
 				Str:        s,
