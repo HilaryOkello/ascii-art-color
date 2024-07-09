@@ -1,5 +1,5 @@
 // Package ascii provides functions for printing ASCII art
-//with optional color highlighting.
+// with optional color highlighting.
 package ascii
 
 import (
@@ -17,19 +17,19 @@ type PrintArgs struct {
 
 // PrintAscii prints ASCII art based on the given PrintArgs configuration.
 func PrintAscii(args *PrintArgs) {
-	indices := GetIndices(args.Str, args.Substr)
-	track := 0
-	count := 0
 	colorCode := "\033[" + args.Color + "m"
 	reset := "\033[0m"
 	index := 0
 
 	// Loop through each line of ASCII art (up to 8 lines)
 	for index < 8 {
-		for i, char := range args.Str {
-			character := args.Characters[int(char)-32]             
-			lines := strings.Split(character, "\n")
+		indices := GetIndices(args.Str, args.Substr)
+		track := 0
+		count := 0
 
+		for i, char := range args.Str {
+			character := args.Characters[int(char)-32]
+			lines := strings.Split(character, "\n")
 			if shouldPrintWithColor(args, indices, track, i) {
 				fmt.Printf("%s%s%s", colorCode, lines[index], reset)
 				count++

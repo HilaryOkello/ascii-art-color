@@ -118,7 +118,7 @@ func TestCheckFile(t *testing.T) {
 			expected: true,
 		},
 		{
-			file:     "shadow",
+			file:     "SHADOW",
 			expected: true,
 		},
 		{
@@ -126,7 +126,7 @@ func TestCheckFile(t *testing.T) {
 			expected: true,
 		},
 		{
-			file:     "STANDARD",
+			file:     "STANDRD",
 			expected: false,
 		},
 		{

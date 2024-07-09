@@ -75,16 +75,19 @@ func CheckFile(s string) bool {
 func ValidateFlag() error {
 	usage := fmt.Errorf(`Usage: go run . [OPTION] [STRING]
 
-EX: go run . --color=<color> "something"`)
-	seenFlags := make(map[string]bool)// tracks duplication
+	EX: go run . --color=<color> <substring to be colored> "something"`)
+	seenFlags := make(map[string]bool) // tracks duplication
 	for _, arg := range os.Args[1:] {
 		if strings.HasPrefix(arg, "-") {
 			if strings.HasPrefix(arg, "-color") {
 				return usage
-			} else if strings.Contains(arg, "color") && !strings.Contains(arg, "=") {
+			} else if strings.HasPrefix(arg, "--color") && !strings.Contains(arg, "=") {
 				return usage
-			} else if strings.HasPrefix(arg, "--color="){
-				flagName := strings.SplitN(arg[2:], "=", 2)[0]
+			} else if strings.HasPrefix(arg, "--color=") {
+				flagName := "--color="
+				if arg[8:] == "" {
+					return usage
+				}
 				if seenFlags[flagName] {
 					return usage
 				}

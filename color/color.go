@@ -96,6 +96,9 @@ func rgbToANSI(c string) (string, error) {
 // If the input string is not a valid hexadecimal color, it returns an error.
 func hexToANSI(c string) (string, error) {
 	hex := strings.TrimPrefix(c, "#")
+	if len(hex) == 3 {
+		hex = fmt.Sprintf("%c%c%c%c%c%c", hex[0], hex[0], hex[1], hex[1], hex[2], hex[2])
+	}
 	if len(hex) != 6 {
 		return "", fmt.Errorf("invalid color hexadecimal")
 	}

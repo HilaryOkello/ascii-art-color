@@ -11,7 +11,7 @@ import (
 
 var Usage = fmt.Errorf(`Usage: go run . [OPTION] [STRING]
 
-EX: go run . --color=<color> "something"`)
+EX: go run . --color=<color> <substring to be colored> "something"`)
 
 // ProcessArgs processes arguments passed on terminal and returns a substr,
 // str, filename, color as strings and a nil error if processed successfuly.
@@ -55,6 +55,9 @@ func ProcessArgs() (string, string, string, string, error) {
 		}
 	} else {
 		return "", "", "", "", Usage
+	}
+	if !strings.Contains(str, substr) {
+		return "", "", "", "", fmt.Errorf("sub-string is not contained in the string")
 	}
 	str = strings.ReplaceAll(str, "\\t", "    ")
 	str = strings.ReplaceAll(str, "\n", "\\n")
