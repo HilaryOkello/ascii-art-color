@@ -11,7 +11,7 @@ import (
 
 var Usage = fmt.Errorf(`Usage: go run . [OPTION] [STRING]
 
-EX: go run . --color=<color> "something"`)
+EX: go run . --color=<color> <substring to be colored> "something"`)
 
 // ProcessArgs processes arguments passed on terminal and returns a substr,
 // str, filename, color as strings and a nil error if processed successfuly.
