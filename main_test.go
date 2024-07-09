@@ -40,21 +40,21 @@ func TestMain(t *testing.T) {
 			substr: "there",
 			str:    "hello there",
 			banner: "shadow",
-			want: "                                       \x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\n"+
-"_|                _| _|                \x1b[33m  _|     \x1b[0m\x1b[33m_|       \x1b[0m\x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\n"+
-"_|_|_|     _|_|   _| _|   _|_|         \x1b[33m_|_|_|_| \x1b[0m\x1b[33m_|_|_|   \x1b[0m\x1b[33m  _|_|   \x1b[0m\x1b[33m_|  _|_| \x1b[0m\x1b[33m  _|_|   \x1b[0m\n"+
-"_|    _| _|_|_|_| _| _| _|    _|       \x1b[33m  _|     \x1b[0m\x1b[33m_|    _| \x1b[0m\x1b[33m_|_|_|_| \x1b[0m\x1b[33m_|_|     \x1b[0m\x1b[33m_|_|_|_| \x1b[0m\n"+
-"_|    _| _|       _| _| _|    _|       \x1b[33m  _|     \x1b[0m\x1b[33m_|    _| \x1b[0m\x1b[33m_|       \x1b[0m\x1b[33m_|       \x1b[0m\x1b[33m_|       \x1b[0m\n"+
-"_|    _|   _|_|_| _| _|   _|_|         \x1b[33m    _|_| \x1b[0m\x1b[33m_|    _| \x1b[0m\x1b[33m  _|_|_| \x1b[0m\x1b[33m_|       \x1b[0m\x1b[33m  _|_|_| \x1b[0m\n"+
-"                                       \x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\n"+
-"                                       \x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\n",
+			want: "                                       \x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\n" +
+				"_|                _| _|                \x1b[33m  _|     \x1b[0m\x1b[33m_|       \x1b[0m\x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\n" +
+				"_|_|_|     _|_|   _| _|   _|_|         \x1b[33m_|_|_|_| \x1b[0m\x1b[33m_|_|_|   \x1b[0m\x1b[33m  _|_|   \x1b[0m\x1b[33m_|  _|_| \x1b[0m\x1b[33m  _|_|   \x1b[0m\n" +
+				"_|    _| _|_|_|_| _| _| _|    _|       \x1b[33m  _|     \x1b[0m\x1b[33m_|    _| \x1b[0m\x1b[33m_|_|_|_| \x1b[0m\x1b[33m_|_|     \x1b[0m\x1b[33m_|_|_|_| \x1b[0m\n" +
+				"_|    _| _|       _| _| _|    _|       \x1b[33m  _|     \x1b[0m\x1b[33m_|    _| \x1b[0m\x1b[33m_|       \x1b[0m\x1b[33m_|       \x1b[0m\x1b[33m_|       \x1b[0m\n" +
+				"_|    _|   _|_|_| _| _|   _|_|         \x1b[33m    _|_| \x1b[0m\x1b[33m_|    _| \x1b[0m\x1b[33m  _|_|_| \x1b[0m\x1b[33m_|       \x1b[0m\x1b[33m  _|_|_| \x1b[0m\n" +
+				"                                       \x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\n" +
+				"                                       \x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\x1b[33m         \x1b[0m\n",
 		},
 		{
 			color:  "rainbow",
 			substr: "there",
 			str:    "not a valid color",
 			banner: "shadow",
-			want: "invalid color/rgb/hex\n",                                                                 
+			want:   "invalid color/rgb/hex\n",
 		},
 		{
 			color:  "",
@@ -76,7 +76,7 @@ func TestMain(t *testing.T) {
 			substr: "invalid",
 			str:    "invalid banner",
 			banner: "shadw",
-			want: "open shadw.txt: no such file or directory\n",
+			want:   "open shadw.txt: no such file or directory\n",
 		},
 	}
 
