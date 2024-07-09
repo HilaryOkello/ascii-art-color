@@ -81,10 +81,13 @@ func ValidateFlag() error {
 		if strings.HasPrefix(arg, "-") {
 			if strings.HasPrefix(arg, "-color") {
 				return usage
-			} else if strings.Contains(arg, "color") && !strings.Contains(arg, "=") {
+			} else if strings.HasPrefix(arg, "--color") && !strings.Contains(arg, "=") {
 				return usage
 			} else if strings.HasPrefix(arg, "--color=") {
 				flagName := "--color="
+				if arg[8:] == "" {
+					return usage
+				}
 				if seenFlags[flagName] {
 					return usage
 				}
