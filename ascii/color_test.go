@@ -87,7 +87,7 @@ func Test_hexToANSI(t *testing.T) {
 func TestParseColor(t *testing.T) {
 	tests := []struct {
 		name    string
-		color    string
+		color   string
 		want    string
 		wantErr bool
 	}{
