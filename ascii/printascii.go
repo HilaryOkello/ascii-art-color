@@ -42,7 +42,7 @@ func PrintAscii(args *PrintArgs) {
 			}
 		}
 		fmt.Println()
-		index += 1
+		index++
 	}
 }
 
