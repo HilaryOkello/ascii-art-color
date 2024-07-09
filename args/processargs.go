@@ -56,6 +56,9 @@ func ProcessArgs() (string, string, string, string, error) {
 	} else {
 		return "", "", "", "", Usage
 	}
+	if !strings.Contains(str, substr) {
+		return "", "", "", "", fmt.Errorf("sub-string is not contained in the string")
+	}
 	str = strings.ReplaceAll(str, "\\t", "    ")
 	str = strings.ReplaceAll(str, "\n", "\\n")
 	substr = strings.ReplaceAll(substr, "\\t", "    ")
