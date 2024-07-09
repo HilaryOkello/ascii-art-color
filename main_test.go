@@ -51,10 +51,17 @@ func TestMain(t *testing.T) {
 		},
 		{
 			color:  "rainbow",
-			substr: "there",
+			substr: "not",
 			str:    "not a valid color",
 			banner: "shadow",
 			want:   "invalid color/rgb/hex\n",
+		},
+		{
+			color:  "red",
+			substr: "yet",
+			str:    "substr not in str",
+			banner: "shadow",
+			want:   "sub-string is not contained in the string\n",
 		},
 		{
 			color:  "",
