@@ -1,7 +1,6 @@
 package errs
 
 import (
-	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -145,52 +144,47 @@ func TestCheckFile(t *testing.T) {
 }
 
 func TestValidateFlag(t *testing.T) {
-	usage := fmt.Errorf(`Usage: go run . [OPTION] [STRING]
-
-EX: go run . --color=<color> "something"`)
-	testcases := []struct {
-		flag        string
-		expectedErr error
+	tests := []struct {
+		name    string
+		args    []string
+		wantErr bool
 	}{
 		{
-			flag:        "-color",
-			expectedErr: usage,
+			name:    "invalid flag 1",
+			args:    []string{"ascii-art-color", "-color=red", "Hello"},
+			wantErr: true,
 		},
 		{
-			flag:        "--color",
-			expectedErr: usage,
+			name:    "invalid flag 2",
+			args:    []string{"ascii-art-color", "-color", "red", "Hello"},
+			wantErr: true,
 		},
 		{
-			flag:        "--color=<color>",
-			expectedErr: nil,
-		},
-		{
-			flag:        "color",
-			expectedErr: usage,
-		},
-		{
-			flag:        "--color ",
-			expectedErr: usage,
-		},
-		{
-			flag:        "--color <color>",
-			expectedErr: usage,
+			name:    "valid flag",
+			args:    []string{"ascii-art-color", "--color=red", "World", "Hello World"},
+			wantErr: false,
 		},
 	}
-	for _, tc := range testcases {
-		t.Run(tc.flag, func(t *testing.T) {
-			err := ValidateFlag()
-			if tc.expectedErr == nil && err != nil {
-				t.Errorf("Test%s Failed.\n\n"+
-					"Expected:\nError: %v\n\n"+
-					"Found: \nError: %v\n",
-					tc.flag, tc.expectedErr, err)
-			} else if err != nil && (err.Error() != tc.expectedErr.Error()) {
-				t.Errorf("Test%s Failed.\n \n"+
-					"Expected:\nError: %v\n\n"+
-					"Found: \nError: %v\n",
-					tc.flag, tc.expectedErr, err)
-			}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			runTestWithArgs(t, tt.args, tt.wantErr)
 		})
 	}
+}
+
+func runTestWithArgs(t *testing.T, args []string, wantErr bool) {
+	// Save the original flags and restore them after the test
+	originalArgs := os.Args
+	defer func() {
+		os.Args = originalArgs
+	}()
+
+	// Set os.Args to the test case's arguments
+	os.Args = args
+	err := ValidateFlag()
+	if (err != nil) != wantErr {
+		t.Errorf("ProcessArgs() error = %v, wantErr %v", err, wantErr)
+		return
+	}
+
 }

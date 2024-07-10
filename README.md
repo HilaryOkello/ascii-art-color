@@ -34,6 +34,16 @@ go run . --color=blue "Hello World"
 go run . --color=blue World "Hello World" shadow
 ```
 ![text](images/image3.png)
+#### With color value as RGB
+```bash
+go run . "--color=rgb(255, 0, 0)" World "Hello World" shadow
+```
+![text](images/image6.png)
+#### With color value as hexadecimal
+```bash
+go run . --color=#56fbff World "Hello World" thinkertoy
+```
+![text](images/image5.png)
 #### The program will also run if only the string is passed.
 ```bash
 go run . "Hello World"
@@ -56,4 +66,4 @@ This project was a collaboration of  three apprentices from [z01Kisumu](https://
 
 ### License
 
-This project is licensed under the [MIT License](./LICENSE.txt)
+This project is licensed under  [MIT License](./LICENSE.txt)

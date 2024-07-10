@@ -45,6 +45,7 @@ var ansiCodes = map[string]string{
 // in the format "38;2;r;g;b" or a predefined ANSI code for named colors.
 // If the color string is invalid, it returns an error.
 func ParseColor(c string) (string, error) {
+	c = strings.TrimSpace(c)
 	if strings.HasPrefix(c, "rgb(") {
 		code, err := rgbToANSI(c)
 		if err != nil {
