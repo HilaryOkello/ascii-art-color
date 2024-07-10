@@ -43,7 +43,7 @@ func main() {
 	// Split the str & substr by "\\n" to get the string section in each line
 	strs := strings.Split(str, "\\n")
 	substrs := strings.Split(substr, "\\n")
-	count := 0 // tracks empty strings after splitting with \n
+	count := 0 // tracks empty strings after splitting str with \n
 
 	for i, s := range strs {
 		if s == "" {
@@ -53,7 +53,7 @@ func main() {
 			}
 		} else {
 			if substr != "" && i < len(substrs) {
-				if substrs[i] != "" {
+				if substrs[i] != "" { // deals with empty strings after splitting substr with \n
 					substr = substrs[i]
 				}
 			}
