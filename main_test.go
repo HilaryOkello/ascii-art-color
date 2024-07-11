@@ -97,7 +97,7 @@ func TestMain(t *testing.T) {
 			substr: "invalid",
 			str:    "invalid banner",
 			banner: "shadw",
-			want:   "open ./banner/shadw.txt: no such file or directory\n",
+			want:   "open shadw.txt: no such file or directory\n",
 		},
 	}
 
