@@ -66,4 +66,4 @@ This project was a collaboration of  three apprentices from [z01Kisumu](https://
 
 ### License
 
-This project is licensed under  [MIT License](./LICENSE.txt)
+This project is licensed under  [MIT License](./LICENSE)
